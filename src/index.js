@@ -20,8 +20,7 @@ app.store.subscribe(() => {
 
   const user = state.auth.user;
   const isAuthenticated = state.auth.isAuthenticated;
-  const cookieValue = ''; // Place your cookie value here
-  const localStorageValue = localStorage.getItem('redirectUrl');
+  const cookieValue = '';
 
   if (isAuthenticated) {
     const profileSection = document.createElement('div');
@@ -29,8 +28,8 @@ app.store.subscribe(() => {
 
     const profilePic = document.createElement('img');
     profilePic.className = 'profile-pic';
-    profilePic.src = user?.profilePictureUrl; // Assuming profilePictureUrl is in the user object
-    profilePic.alt = user?.name; // Assuming name is in the user object
+    profilePic.src = user?.profilePictureUrl;
+    profilePic.alt = user?.name;
     profileSection.appendChild(profilePic);
 
     const profileName = document.createElement('p');
@@ -56,7 +55,8 @@ app.store.subscribe(() => {
     loginButton.className = 'login-button';
     loginButton.textContent = 'Login';
     loginButton.addEventListener('click', () => {
-      app.loginWithRedirect();
+      setCookie("loginOrigin", "https://app3.correkt.horse", 7);
+      window.location.href = `https://auth.correkt.horse?redirectUrl=${window.location}`;
     });
     mainContainer.appendChild(loginButton);
   }
@@ -65,11 +65,6 @@ app.store.subscribe(() => {
   cookieDebug.textContent = `cookieValue: ${cookieValue}`;
   debugContainer.appendChild(cookieDebug);
 
-  const localStorageDebug = document.createElement('p');
-  localStorageDebug.textContent = `localStorage: ${localStorageValue}`;
-  debugContainer.appendChild(localStorageDebug);
-
-  // Update dynamic styles
   let styleHtml = '';
   if (isAuthenticated) {
     styleHtml += '[fe-state="isAuthenticated"] { }';
@@ -80,3 +75,8 @@ app.store.subscribe(() => {
   }
   style.innerHTML = styleHtml;
 });
+
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+}
