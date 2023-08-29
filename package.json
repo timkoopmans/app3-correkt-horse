@@ -15,7 +15,7 @@
     "webpack-dev-server": "^4.11.0"
   },
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && cp -r public/* dist/",
     "dev-server": "webpack serve  --open"
   },
   "dependencies": {
