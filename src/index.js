@@ -15,12 +15,10 @@ app.store.subscribe(() => {
   const mainContainer = document.getElementById('main-container');
   const debugContainer = document.querySelector('.debug');
 
-  // Clear existing content to render updated state
   mainContainer.innerHTML = '';
 
   const user = state.auth.user;
   const isAuthenticated = state.auth.isAuthenticated;
-  const cookieValue = '';
 
   if (isAuthenticated) {
     const profileSection = document.createElement('div');
@@ -61,8 +59,10 @@ app.store.subscribe(() => {
     mainContainer.appendChild(loginButton);
   }
 
+  debugContainer.innerHTML = '';
+  const cookieValue = getCookie("loginOrigin"); // Now using getCookie function
   const cookieDebug = document.createElement('p');
-  cookieDebug.textContent = `cookieValue: ${cookieValue}`;
+  cookieDebug.textContent = `cookieValue (loginOrigin): ${cookieValue}`;
   debugContainer.appendChild(cookieDebug);
 
   let styleHtml = '';
@@ -80,3 +80,11 @@ function setCookie(name, value, days) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
 }
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
