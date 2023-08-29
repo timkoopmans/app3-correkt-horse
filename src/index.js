@@ -53,7 +53,7 @@ app.store.subscribe(() => {
     loginButton.className = 'login-button';
     loginButton.textContent = 'Login';
     loginButton.addEventListener('click', () => {
-      setCookie("loginOrigin", "https://app3.correkt.horse", 7, { Secure: true, Path: "/", SameSite: "None" });
+      setCookie("loginOrigin", "app3.correkt.horse", 7, { Secure: true, Path: "/", SameSite: "None" });
       console.log("getCoookie: " + getCookie("loginOrigin"));
       window.location.href = `https://auth.correkt.horse`;
     });
@@ -94,7 +94,6 @@ function setCookie(name, value, days, options = {}) {
 
   document.cookie = updatedCookie;
 }
-
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
