@@ -53,7 +53,7 @@ app.store.subscribe(() => {
     loginButton.className = 'login-button';
     loginButton.textContent = 'Login';
     loginButton.addEventListener('click', () => {
-      setCookie("loginOrigin", "https://app3.correkt.horse", 7);
+      setCookie("loginOrigin", "https://app3.correkt.horse", 7, { Secure: true, Path: "/", SameSite: "None" });
       console.log("getCoookie: " + getCookie("loginOrigin"));
       window.location.href = `https://auth.correkt.horse`;
     });
@@ -61,7 +61,7 @@ app.store.subscribe(() => {
   }
 
   debugContainer.innerHTML = '';
-  const loginOrigin = getCookie("loginOrigin"); // Now using getCookie function
+  const loginOrigin = getCookie("loginOrigin");
   const cookieDebug = document.createElement('p');
   cookieDebug.textContent = `loginOrigin: ${loginOrigin}`;
   debugContainer.appendChild(cookieDebug);
@@ -77,10 +77,24 @@ app.store.subscribe(() => {
   style.innerHTML = styleHtml;
 });
 
-function setCookie(name, value, days) {
+function setCookie(name, value, days, options = {}) {
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+  updatedCookie += "; expires=" + expires;
+  updatedCookie += "; Domain=.correkt.horse";  // Setting the Domain
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
 }
+
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
