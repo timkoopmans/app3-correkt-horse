@@ -10,10 +10,6 @@ const app = initialize({
   },
 })
 
-document.querySelector('[fe-action="open-admin-portal"]').addEventListener('click', () => {
-  app.showAdminPortal()
-})
-
 app.store.subscribe(() => {
   const state = app.store.getState();
   const mainContainer = document.getElementById('main-container');
